@@ -1,0 +1,10 @@
+node_modules
+.DS_Store
+/dist
+/lib
+
+*.local
+*.log
+*.lock
+*.zip
+*.rar
