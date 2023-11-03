@@ -1,5 +1,6 @@
-import { h, Fragment } from "pl-vue";
+import { h } from "pl-vue";
 import style from './style.module.scss';
+
 export default function() {
   return <footer className={style.footer}>
     <strong>⚠️ 注意事项</strong>

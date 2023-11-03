@@ -1,12 +1,12 @@
 import style from './style.module.scss';
-import { h, Link } from 'pl-vue';
-import Layout from '@/components/layout';
+import { h } from 'pl-vue';
+import { Link } from 'pl-vue/lib/router';
 import { joinClass } from "@/utils/string";
 import env from "~/config/env";
 
 function Home() {
 
-  return <Layout>
+  return <div>
     <div className={style.banner}>
       <div className={style.box}>
         <div className={style.bg}>
@@ -51,7 +51,7 @@ function Home() {
       </li>
 
     </ul>
-  </Layout>
+  </div>
 }
 
 export default Home;

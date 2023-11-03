@@ -92,9 +92,6 @@
   }
   li {
     line-height: 24px;
-    > p{
-      display: inline-block;
-    }
   }
 
   ol ol, ul ol {
@@ -102,7 +99,6 @@
   }
 
   pre {
-    padding: 0px 24px;
     width: 100%;
     box-sizing: border-box;
     white-space: pre-wrap;
@@ -128,7 +124,7 @@
   pre {
     line-height: 1.7em;
     overflow: auto;
-    padding: 6px 10px;
+    padding: 0 2px;
     border-radius: 6px;
     box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
   }

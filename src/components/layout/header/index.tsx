@@ -1,4 +1,5 @@
-import { h, Fragment, Link } from "pl-vue";
+import { h } from "pl-vue";
+import { Link } from "pl-vue/lib/router";
 import style from './style.module.scss';
 import env from "~/config/env";
 

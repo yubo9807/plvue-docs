@@ -1,6 +1,8 @@
 import './styles/index.scss';
-import { h, Router, createRouter } from "pl-vue";
+import { h } from "pl-vue";
+import { Router, createRouter } from 'pl-vue/lib/router';
 import env from '~/config/env';
+import Layout from './components/layout';
 import Home from './pages/home';
 import Docs from './pages/docs';
 import NotFound from "./pages/not-found";
@@ -17,7 +19,9 @@ const router = createRouter({
 
 
 function App() {
-  return <Router />
+  return <Layout>
+    <Router />
+  </Layout>
 }
 
 export default App;

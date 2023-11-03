@@ -1,8 +1,8 @@
 import style from './style.module.scss';
 import './markdown.scss';
-import { h, nextTick, onMounted, ref, watch, computed, Helmet, Link, useRoute } from "pl-vue";
+import { h, nextTick, onMounted, ref, watch, computed } from "pl-vue";
+import { Helmet, Link, useRoute } from 'pl-vue/lib/router'
 import { joinClass } from "@/utils/string";
-import Layout from '@/components/layout';
 import { api_getDocsConfig, api_getDocsContent } from '@/api/docs';
 
 function Docs({ data }) {
@@ -50,7 +50,7 @@ function Docs({ data }) {
 
   const title = computed(() => list.value.find(val => val.value === active.value)?.label);
 
-  return <Layout>
+  return <div>
     <Helmet>
       <title>{() => title.value + ' | Pl Vue'}</title>
       <meta name='description' content={() => `${title.value}`} />
@@ -66,7 +66,7 @@ function Docs({ data }) {
       </div>
     </div>
     <div className={() => joinClass(style.showSide, visible.value ? style.active : '')} onclick={() => visible.value = !visible.value}></div>
-  </Layout>
+  </div>
 }
 
 Docs.prototype.getInitialProps = async (route) => {
