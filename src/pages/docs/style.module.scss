@@ -6,6 +6,7 @@
 }
 
 .side{
+  --line-color: #eee;
   position: fixed;
   width: var(--side-width);
   max-height: calc(100vh - var(--header-height));
@@ -17,12 +18,15 @@
       display: block;
     }
     &:not(:last-child){
-      border-bottom: 1px solid #eee;
+      border-bottom: 1px solid var(--line-color);
     }
     &.active{
       background: #6088b624;
     }
   }
+}
+:root[data-theme="dark"] .side{
+  --line-color: #333;
 }
 
 .content{
@@ -38,7 +42,7 @@
     width: 70vw;
     left: 0;
     top: var(--header-height);
-    background: white;
+    background: var(--main-bg-color);
     transform: translateX(-100%);
     transition: transform .4s;
     box-shadow: 0 10px 10px rgba(0,0,0,.1);

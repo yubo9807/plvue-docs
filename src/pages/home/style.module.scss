@@ -1,4 +1,5 @@
 .banner{
+  --box-bg-color: white;
   height: 50vw;
   max-height: 500px;
   text-align: center;
@@ -10,7 +11,7 @@
   }
   .bg{
     padding: 20px;
-    background: white;
+    background: var(--box-bg-color);
     filter: contrast(100);
   }
   strong{
@@ -58,6 +59,9 @@
       opacity: 1;
     }
   }
+}
+:root[data-theme="dark"] .banner{
+  --box-bg-color: black;
 }
 @media (max-width: 768px) {
   .banner strong{

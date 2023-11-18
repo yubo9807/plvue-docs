@@ -4,12 +4,17 @@
 
   --both-sides-padding: 20px;
 
+  --main-bg-color: #fff;
   --main-font-color: #404040;
   --mark-font-color: #999;
   --link-font-color: #6088b6;
   --vue-bg: linear-gradient(315deg,#42d392 25%,#647eff);
-
 }
+:root[data-theme="dark"]{
+  --main-bg-color: #1a1a1a;
+  --main-font-color: #dadada;
+}
+
 @media (max-width: 768px) {
   :root{
     --both-sides-padding: 10px;
@@ -20,6 +25,9 @@ html{
   font-size: 14px;
   color: var(--main-font-color);
   font-family: "Arial";
+}
+body{
+  background: var(--main-bg-color);
 }
 body, ul, h1, h2, h3, h4, h5, h6, p, pre{
   margin: 0;
