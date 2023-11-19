@@ -1,4 +1,6 @@
+import Message from "@/components/message";
 import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from "axios-minified";
+import { isBrowser } from "pl-vue/lib/utils";
 
 export interface SateConfig extends AxiosRequestConfig {
   noTips?: boolean
@@ -18,6 +20,8 @@ export class Request {
    * @param config 
    */
   constructor(config: SateConfig) {
+
+    isBrowser() && fractureTips();
 
     this.config = config;
     this.instance = axios.create(config);
@@ -86,7 +90,7 @@ export class Request {
    */
   error(response: AxiosResponse): Promise<any> {
     const { data, config } = response;
-    // !(config as SateConfig).noTips && Message.error(data.message);
+    !(config as SateConfig).noTips && Message.error(data.message);
     return Promise.reject(data);
   }
 
@@ -105,22 +109,30 @@ export function asyncto(promise: Promise<any>) {
     .catch(err => [ err, null ]);
 }
 
-
+/**
+ * 延时
+ * @param time 
+ * @returns 
+ */
+export function delay(time: number) {
+  return new Promise(resolve => {
+    setTimeout(resolve, time);
+  })
+}
 
 /**
  * 断网提示
  */
 export function fractureTips() {
   window.addEventListener('online', () => {
-    // Message.closeAll();
-    // Message.success('网络恢复');
+    Message.closeAll();
+    Message.success('网络恢复');
   })
   window.addEventListener('offline', () => {
-    // Message({
-    //   type: 'error',
-    //   message: '网络中断',
-    //   duration: 0,
-    //   showClose: true
-    // });
+    Message({
+      type: 'error',
+      message: '网络中断',
+      duration: null,
+    });
   })
 }

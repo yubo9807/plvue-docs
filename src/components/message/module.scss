@@ -1,0 +1,44 @@
+.comp-message-wrap{
+  position: fixed;
+  top: 100px;
+  width: 100%;
+  z-index: 9999;
+}
+
+.comp-message{
+  --time: calc(var(--animation-time) * 1s);
+  position: absolute;
+  top: calc(var(--sort) * 40px);
+  left: 50%;
+  min-width: 220px;
+  transform: translateX(-50%);
+  background: rgba(40,40,40,.8);
+  padding: 10px;
+  color: #fff;
+  border-radius: 8px;
+  transition: transform var(--time), opacity var(--time), top, var(--time);
+  display: flex;
+  justify-content: space-between;
+  .icon-close{
+    cursor: pointer;
+    opacity: 0;
+  }
+  &:hover{
+    .icon-close{
+      opacity: 1;
+    }
+  }
+  &.hidden{
+    transform: translate(-50%, -20px);
+    opacity: 0;
+  }
+  &.error{
+    background: rgba(184, 0, 0, 0.8);
+  }
+  &.success{
+    background: rgba(47, 189, 44, 0.8);
+  }
+  &.warning{
+    background: rgba(239, 179, 0, 0.8);
+  }
+}

@@ -1,12 +1,3 @@
-import { randomNum } from "./number";
-
-/**
- * 生成随机颜色
- */
-export function createColor(min = '000000', max = 'ffffff') {
-  const minNumber = parseInt(min, 16), maxNumber = parseInt(max, 16);
-  return '#' + randomNum(maxNumber, minNumber).toString(16);
-}
 
 /**
  * 连接 class
@@ -14,7 +5,7 @@ export function createColor(min = '000000', max = 'ffffff') {
  * @returns 
  */
 export function joinClass(...args: string[]) {
-  return args.join(' ').trim().replace(/\s+/, ' ');
+  return args.filter(val => val).join(' ').trim().replace(/\s+/, ' ');
 }
 
 const mimeTypes = {
