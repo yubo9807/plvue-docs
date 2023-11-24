@@ -1,13 +1,12 @@
 import './module.scss';
 import { joinClass } from "@/utils/string";
-import { h, onMounted, ref, render } from "pl-vue";
-import { PropsType } from "pl-vue/lib/router";
+import { h, onMounted, ref, render, PropsType } from "pl-vue";
 import { delay } from "@/utils/network";
 import { isBrowser } from "pl-vue/lib/utils";
 
-const queue = new Set();
+const queue    = new Set();
 const ANI_TIME = 400;
-const SORT     = '--sort';
+let topCount   = 0;
 
 type Props = PropsType<{
   message:   string
@@ -16,14 +15,17 @@ type Props = PropsType<{
 }>
 function Comp(props: Props) {
 
-  const hidden   = ref(true);
-  const elRef    = ref<HTMLElement>();
-  let   timer    = null;
+  const hidden = ref(true);
+  const elRef  = ref<HTMLElement>();
+  let   timer  = null;
 
   const id = Symbol('id');
   queue.add(id);
 
   onMounted(async () => {
+    elRef.value.style.top = topCount + 'px';
+    const height = elRef.value.offsetHeight;
+    topCount += height + 10;
     await delay(100);
     hidden.value = false;
     anewClose();
@@ -36,13 +38,15 @@ function Comp(props: Props) {
     if (queue.size === 0) {
       wrapEl.remove();
     } else {
-      const styles = window.getComputedStyle(elRef.value);
-      const index = Number(styles.getPropertyValue(SORT));
+      const sort = Number(elRef.value.dataset.sort);
+      const height = elRef.value.offsetHeight;
+      topCount -= height + 10;
       elRef.value.remove();
-      [...wrapEl.children].forEach((val: HTMLElement) => {
-        const styles = window.getComputedStyle(val);
-        const sort = Number(styles.getPropertyValue(SORT));
-        val.style.setProperty(SORT, `${sort > index ? sort - 1 : sort}`);
+      [...wrapEl.children].forEach((val: HTMLElement, index) => {
+        if (index < sort) return;
+        const top = parseInt(val.style.top);
+        val.style.top = top - height - 10 + 'px';
+        val.dataset.sort = index + '';
       })
     }
   }
@@ -60,7 +64,8 @@ function Comp(props: Props) {
   return <div
     ref={elRef}
     className={() => joinClass('comp-message', props.type, hidden.value && 'hidden')}
-    style={`--animation-time: ${ANI_TIME / 1000}; --sort: ${queue.size - 1}`}
+    data-sort={queue.size - 1 + ''}
+    style={`--time: ${ANI_TIME / 1000}s`}
     onmouseenter={cancelClose}
     onmouseout={anewClose}
   >
@@ -89,6 +94,7 @@ Message.closeAll = async () => {
     val.remove();
   })
   queue.clear();
+  topCount = 0;
   wrapEl.remove();
 }
 

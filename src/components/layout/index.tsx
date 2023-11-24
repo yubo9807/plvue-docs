@@ -1,6 +1,5 @@
 import style from './style.module.scss';
-import { h, Fragment } from "pl-vue";
-import { PropsType } from "pl-vue/lib/router";
+import { h, Fragment, PropsType } from "pl-vue";
 import Header from "./header";
 import Footer from "./footer";
 

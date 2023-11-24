@@ -6,20 +6,23 @@
 }
 
 .comp-message{
-  --time: calc(var(--animation-time) * 1s);
   position: absolute;
-  top: calc(var(--sort) * 40px);
   left: 50%;
   min-width: 220px;
   transform: translateX(-50%);
-  background: rgba(40,40,40,.8);
+  background: rgba(0,0,0,.7);
+  color: white;
   padding: 10px;
-  color: #fff;
   border-radius: 8px;
+  text-align: justify;
   transition: transform var(--time), opacity var(--time), top, var(--time);
-  display: flex;
-  justify-content: space-between;
+  padding-right: 30px;
   .icon-close{
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 18px;
     cursor: pointer;
     opacity: 0;
   }

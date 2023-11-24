@@ -1,5 +1,4 @@
-import { h } from "pl-vue";
-import { PropsType } from "pl-vue/lib/router";
+import { h, PropsType } from "pl-vue";
 import { OptionValue } from "./option";
 import './module.scss';
 import { joinClass } from "@/utils/string";
