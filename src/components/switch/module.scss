@@ -1,0 +1,29 @@
+.comp-switch{
+  --height: 18px;
+  --width: 46px;
+  --color: #1a1a1a;
+  display: inline-block;
+  width: var(--width);
+  height: var(--height);
+  border-radius: 18px;
+  border: 2px solid var(--color);
+  cursor: pointer;
+
+  .round{
+    --size: calc(var(--height) - 2px);
+    --gap: calc(calc(var(--height) - var(--size)) / 2);
+    width: var(--size);
+    height: var(--size);
+    margin-top: var(--gap);
+    margin-left: var(--gap);
+    background: var(--color);
+    border-radius: 50%;
+    transition: transform 0.4s;
+  }
+
+  &.is-open{
+    .round{
+      transform: translateX(calc(var(--width) - var(--size) - var(--gap) * 2));
+    }
+  }
+}
