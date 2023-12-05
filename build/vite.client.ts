@@ -16,6 +16,7 @@ const config = defineConfig({
   build: {
     rollupOptions: {
       output: {
+        entryFileNames: 'assets/main-[hash].js',
         manualChunks(url) {
           if (url.includes('node_modules')) {
             return url.split('node_modules/')[1].split('/')[0];
