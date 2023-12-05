@@ -90,7 +90,7 @@ export class Request {
    */
   error(response: AxiosResponse): Promise<any> {
     const { data, config } = response;
-    !(config as SateConfig).noTips && Message.error(data.message);
+    !(config as SateConfig).noTips && Message.error(data.msg);
     return Promise.reject(data);
   }
 
