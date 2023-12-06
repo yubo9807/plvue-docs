@@ -11,7 +11,7 @@ import NotFound from "./pages/not-found";
 function App() {
   initRouter({
     base: env.BASE_URL,
-    // mode: 'hash',
+    mode: 'hash',
   });
 
   // #region 设置主题颜色
