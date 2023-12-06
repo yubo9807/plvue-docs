@@ -1,90 +1,45 @@
-import style from './style.module.scss';
-import './markdown.scss';
-import { h, nextTick, onMounted, ref, watch, computed } from "pl-vue";
-import { Helmet, Link, useRoute } from 'pl-vue/lib/router'
+import { PagePropsType, Router, Route, Link, GetInitialPropsOption, useRouter, useRoute } from "pl-vue/lib/router";
+import { h, onMounted, ref } from "pl-vue";
 import { joinClass } from "@/utils/string";
-import { api_getDocsConfig, api_getDocsContent } from '@/api/docs';
+import { api_getDocsConfig, api_getDocsContent } from "@/api/docs";
+import style from "./style.module.scss";
+import "./markdown.scss";
 
-function Docs({ data }) {
+function Docs(props: PagePropsType) {
 
-  const list = ref(data.list);
-  const content = ref(data.content);
-
-  const route = useRoute();
-  const visible = ref(false);  // 移动端侧边栏是否显示
-  const active = ref(getName());
-  function getName() {
-    const name = route.path.replace(route.monitor, '').slice(1);
-    return name || list.value[0] && list.value[0].value;
-  }
-
-  // path 发生变化，重新请求文档内容
-  const mdRef = ref<HTMLElement>(null);
-  onMounted(async () => {
-    const unWatch = watch(() => route.path, async value => {
-      if (route.monitor !== '/docs') {
-        return unWatch();
-      }
-
-      // 渲染文档
-      active.value = getName();
-      content.value = await getContent(active.value);
-      visible.value = false;
-
-      // 代码高亮
-      nextTick(codeHighlight);      
-    });
-
-    // 开发环境：在切换页面后样式会丢失，可能是 vite 的问题（生产环境没事）
-    import('highlight.js/styles/base16/decaf.css');
-    const hljs = (await import('highlight.js/lib/common')).default;
-
-    codeHighlight();
-    function codeHighlight() {
-      const codeList = mdRef.value.querySelectorAll('pre code');
-      codeList.forEach((val: HTMLElement) => {
-        hljs.highlightElement(val);
-      })
+  onMounted(() => {
+    const route = useRoute();
+    const router = useRouter();
+    if (props.data[0] && !route.path.replace(props.path, '')) {
+      router.replace(props.path + '/' + props.data[0].value);
     }
   })
 
-  const title = computed(() => list.value.find(val => val.value === active.value)?.label);
-
-  return <div>
-    <Helmet>
-      <title>{() => title.value + ' | Pl Vue'}</title>
-      <meta name='description' content={() => `${title.value}`} />
-    </Helmet>
-    <div className={joinClass('leayer', style.container)}>
-      <ul className={() => joinClass(style.side, visible.value ? style.active : '')}>
-        {list.value.map(val => <li className={() => active.value === val.value ? style.active : ''}>
-          <Link to={`/docs/${val.value}`}>{val.label}</Link>
-        </li>)}
-      </ul>
-      <div ref={mdRef} className={joinClass(style.content, 'markdown')}>
-        <div innerHTML={() => content.value}></div>
-      </div>
-    </div>
-    <div className={() => joinClass(style.showSide, visible.value ? style.active : '')} onclick={() => visible.value = !visible.value}></div>
+  return <div className={joinClass('leayer', style.container)}>
+    <ul className={() => joinClass(style.side)}>
+      {props.data.map(val => 
+        <li>
+          <Link to={`${props.path}/${val.value}`}>{val.label}</Link>
+        </li>
+      )}
+    </ul>
+    <Router prefix={props.path}>
+      {...props.data.map(item => 
+        <Route path={'/' + item.value} component={cloneFunction(Content)} />
+      )}
+    </Router>
   </div>
 }
 
-Docs.prototype.getInitialProps = async (route) => {
-  const list = await getCatalogue();
-  const content = await getContent(route.path.replace(route.monitor, '') || list[0] && list[0].value);
-  return {
-    list,
-    content,
-  };
+function cloneFunction(fn: Function) {
+  const newFn = function (...args) {
+    return fn.apply(this, args);
+  }
+  newFn.prototype = fn.prototype;;
+  return newFn;
 }
 
-export default Docs;
-
-/**
- * 获取文档目录
- * @returns 
- */
-async function getCatalogue() {
+Docs.prototype.getInitialProps = async () => {
   const [err, res] = await api_getDocsConfig();
   const list = [];
   if (err) return list;
@@ -96,13 +51,30 @@ async function getCatalogue() {
   return list;
 }
 
-/**
- * 获取文档内容
- * @param name 
- * @returns 
- */
-async function getContent(name: string) {
-  const [err, res] = await api_getDocsContent(`/plvue/${name}.md`)
+
+function Content(props: PagePropsType) {
+  const mdRef = ref<HTMLElement>();
+
+  onMounted(async () => {
+    import('highlight.js/styles/base16/decaf.css');
+    const hljs = (await import('highlight.js/lib/common')).default;
+
+    // 代码高亮
+    const codeList = mdRef.value.querySelectorAll('pre code');
+    codeList.forEach((val: HTMLElement) => {
+      hljs.highlightElement(val);
+    })
+  })
+
+  return <div ref={mdRef} className={joinClass(style.content, 'markdown')}>
+    <div innerHTML={props.data}></div>
+  </div>
+}
+
+Content.prototype.getInitialProps = async (option: GetInitialPropsOption) => {
+  const [err, res] = await api_getDocsContent(`/plvue${option.path.replace('/docs', '')}.md`)
   if (err) return '';
   return res.data.content;
 }
+
+export default Docs;

@@ -1,25 +1,18 @@
 import './styles/index.scss';
 import { h, onMounted, watch } from "pl-vue";
-import { Router, createRouter } from 'pl-vue/lib/router';
+import { Router, Route, initRouter } from 'pl-vue/lib/router';
 import useStoreViewport, { Theme } from './store/viewport';
 import env from '~/config/env';
 import Layout from './components/layout';
-import Home from './pages/home';
-import Docs from './pages/docs';
 import NotFound from "./pages/not-found";
 
-const router = createRouter({
-  base: env.BASE_URL,
-  mode: 'hash',
-  routes: [
-    { path: '/', component: Home, },
-    { path: '/docs', component: Docs, exact: false, },
-    { component: NotFound, },
-  ]
-});
 
 
 function App() {
+  initRouter({
+    base: env.BASE_URL,
+    // mode: 'hash',
+  });
 
   // #region 设置主题颜色
   const storeViewport = useStoreViewport();
@@ -46,7 +39,10 @@ function App() {
   // #endregion
 
   return <Layout>
-    <Router />
+    <Router notFound={NotFound}>
+      <Route path='/docs' component={() => import('./pages/docs')} exact={false} />
+      <Route path='/' component={() => import('./pages/home')} />
+    </Router>
   </Layout>
 }
 
