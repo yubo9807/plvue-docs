@@ -1,5 +1,5 @@
-import { PagePropsType, Router, Route, Link, GetInitialPropsOption, useRouter, useRoute } from "pl-vue/lib/router";
-import { h, onMounted, ref } from "pl-vue";
+import { PagePropsType, Router, Route, Link, GetInitialPropsOption, useRouter, useRoute, Helmet } from "pl-vue/lib/router";
+import { h, onMounted, ref, watch } from "pl-vue";
 import { joinClass } from "@/utils/string";
 import { api_getDocsConfig, api_getDocsContent } from "@/api/docs";
 import style from "./style.module.scss";
@@ -7,18 +7,38 @@ import "./markdown.scss";
 
 function Docs(props: PagePropsType) {
 
+  const current = {
+    label: '',
+    value: '',
+  };
+
+  const visible = ref(false);
+
   onMounted(() => {
     const route = useRoute();
     const router = useRouter();
+
+    // 重定向
     if (props.data[0] && !route.path.replace(props.path, '')) {
       router.replace(props.path + '/' + props.data[0].value);
     }
+
+    // 路由发生变化
+    watch(() => route.path, value => {
+      current.value = value.replace(props.path + '/', '');
+      const query = props.data.find(val => val.value === current.value);
+      current.label = query && query.label;
+    }, { immediate: true })
   })
 
   return <div className={joinClass('leayer', style.container)}>
-    <ul className={() => joinClass(style.side)}>
+    <Helmet>
+      <title>{() => current.label + ' | Pl Vue'}</title>
+      <meta name='description' content={() => `${current.label}`} />
+    </Helmet>
+    <ul className={() => joinClass(style.side, visible.value ? style.active : '')} onclick={() => visible.value = false}>
       {props.data.map(val => 
-        <li>
+        <li className={() => current.value === val.value && style.active}>
           <Link to={`${props.path}/${val.value}`}>{val.label}</Link>
         </li>
       )}
@@ -28,6 +48,7 @@ function Docs(props: PagePropsType) {
         <Route path={'/' + item.value} component={cloneFunction(Content)} />
       )}
     </Router>
+    <div className={() => joinClass(style.showSide, visible.value ? style.active : '')} onclick={() => visible.value = !visible.value}></div>
   </div>
 }
 
