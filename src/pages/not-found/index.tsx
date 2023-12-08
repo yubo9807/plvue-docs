@@ -7,7 +7,7 @@ export default function NotFound() {
   return <div className={style.pageNotFound}>
     <strong>404</strong>
     <p>
-      <Link to="/">&lt;- 回到首页</Link>
+      <Link to="/">⬅︎ 回到首页</Link>
     </p>
   </div>
 }
