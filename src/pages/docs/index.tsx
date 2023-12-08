@@ -1,5 +1,5 @@
 import { PagePropsType, Router, Route, Link, GetInitialPropsOption, useRouter, useRoute, Helmet } from "pl-vue/lib/router";
-import { h, onMounted, onUnmounted, ref, watch } from "pl-vue";
+import { h, nextTick, onMounted, onUnmounted, ref, watch } from "pl-vue";
 import { joinClass } from "@/utils/string";
 import { api_getDocsConfig, api_getDocsContent } from "@/api/docs";
 import style from "./style.module.scss";
@@ -18,21 +18,26 @@ function Docs(props: PagePropsType) {
     list.push({ label: props.data[prop], value: prop });
   }
 
-  const active = ref<string>('');  // 侧边栏高亮
-  const visible = ref(false);      // 移动端侧边栏显示
+  const active  = ref('');     // 侧边栏高亮
+  const visible = ref(false);  // 移动端侧边栏显示
 
   onMounted(() => {
-    const route = useRoute();
+    const route  = useRoute();
     const router = useRouter();
 
-    // 重定向
-    if (list[0] && !route.path.replace(props.path, '')) {
-      router.replace(props.path + '/' + list[0].value);
-    }
 
     // 路由发生变化
     watch(() => route.path, value => {
-      active.value = value.replace(props.path + '/', '');
+      const type = value.replace(props.path, '')
+      if (type) {
+        active.value = type.slice(1);  // 设置高亮
+        return;
+      }
+
+      // 重定向
+      nextTick(() => {
+        router.replace(props.path + '/' + list[0].value);
+      })
     }, { immediate: true })
   })
 
