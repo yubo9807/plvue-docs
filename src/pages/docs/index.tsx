@@ -21,25 +21,30 @@ function Docs(props: PagePropsType) {
   const active  = ref('');     // 侧边栏高亮
   const visible = ref(false);  // 移动端侧边栏显示
 
+  let unwatch = null;
   onMounted(() => {
     const route  = useRoute();
     const router = useRouter();
 
-
     // 路由发生变化
-    watch(() => route.path, value => {
-      const type = value.replace(props.path, '')
-      if (type) {
-        active.value = type.slice(1);  // 设置高亮
+    unwatch = watch(() => route.path, value => {
+      const type = value.replace(props.path, '');
+
+      // 重定向
+      if (!type || !(type.slice(1) in props.data)) {
+        nextTick(() => {
+          router.replace(props.path + '/' + list[0].value);
+        })
         return;
       }
 
-      // 重定向
-      nextTick(() => {
-        router.replace(props.path + '/' + list[0].value);
-      })
+      // 设置高亮
+      active.value = type.slice(1);
     }, { immediate: true })
   })
+  onUnmounted(() => {
+    unwatch();
+  });
 
   return <div className={joinClass('leayer', style.container)}>
     <ul className={() => joinClass(style.side, visible.value ? style.active : '')} onclick={() => visible.value = false}>
@@ -58,16 +63,6 @@ function Docs(props: PagePropsType) {
   </div>
 }
 
-function cloneFunction(fn: Function) {
-  const newFn = function (...args) {
-    return fn.apply(this, args);
-  }
-  newFn.prototype = fn.prototype;;
-  return newFn;
-}
-
-
-
 Docs.prototype.getInitialProps = async () => {
   const [err, res] = await api_getDocsConfig();
   if (err) return {};
@@ -76,6 +71,17 @@ Docs.prototype.getInitialProps = async () => {
   backupConfig = config;
   return config;
 }
+
+export default Docs;
+
+function cloneFunction(fn: Function) {
+  const newFn = function (...args) {
+    return fn.apply(this, args);
+  }
+  newFn.prototype = fn.prototype;;
+  return newFn;
+}
+
 
 
 function Content(props: PagePropsType) {
@@ -121,5 +127,3 @@ Content.prototype.getInitialProps = async (option: GetInitialPropsOption) => {
   result.content = res.data.content;
   return result;
 }
-
-export default Docs;
