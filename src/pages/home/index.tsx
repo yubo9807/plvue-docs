@@ -1,12 +1,18 @@
 import style from './style.module.scss';
 import { h } from 'pl-vue';
-import { Link } from 'pl-vue/lib/router';
+import { Helmet, Link } from 'pl-vue/lib/router';
 import { joinClass } from "@/utils/string";
 import env from "~/config/env";
 
 function Home() {
 
+  const description = 'Pl Vue 是一个将响应式数据的使用高度交予开发者决定的一个库，它不依赖于任何第三方库。该库提供了组件化、挂载钩子、Router、Store 以及服务端渲染相关 API。';
+
   return <div>
+    <Helmet>
+      <title>首页 | Pl Vue</title>
+      <meta name='description' content={description} />
+    </Helmet>
     <div className={style.banner}>
       <div className={style.box}>
         <div className={style.bg}>
@@ -19,7 +25,7 @@ function Home() {
 
     <article className={joinClass('leayer', 'module-gap', style.article)}>
       <p className={style.paragraph}>
-        Pl Vue 是一个将响应式数据的使用高度交予开发者决定的一个库，它不依赖于任何第三方库。该库提供了组件化、挂载钩子、Router、Store 以及服务端渲染相关 API。项目搭建可参考 
+        {description}项目搭建可参考 
         &nbsp;<a href={env.GITHUB_URL+'mvvm_vue3'}>GitHub</a>
         。
       </p>

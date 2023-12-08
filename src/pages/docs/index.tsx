@@ -1,50 +1,51 @@
 import { PagePropsType, Router, Route, Link, GetInitialPropsOption, useRouter, useRoute, Helmet } from "pl-vue/lib/router";
-import { h, onMounted, ref, watch } from "pl-vue";
+import { h, onMounted, onUnmounted, ref, watch } from "pl-vue";
 import { joinClass } from "@/utils/string";
 import { api_getDocsConfig, api_getDocsContent } from "@/api/docs";
 import style from "./style.module.scss";
 import "./markdown.scss";
 
+let backupConfig = null;
+
 function Docs(props: PagePropsType) {
+  backupConfig = props.data;
+  onUnmounted(() => {
+    backupConfig = null;
+  })
 
-  const current = {
-    label: '',
-    value: '',
-  };
+  const list = [];
+  for (const prop in props.data) {
+    list.push({ label: props.data[prop], value: prop });
+  }
 
-  const visible = ref(false);
+  const active = ref<string>('');  // 侧边栏高亮
+  const visible = ref(false);      // 移动端侧边栏显示
 
   onMounted(() => {
     const route = useRoute();
     const router = useRouter();
 
     // 重定向
-    if (props.data[0] && !route.path.replace(props.path, '')) {
-      router.replace(props.path + '/' + props.data[0].value);
+    if (list[0] && !route.path.replace(props.path, '')) {
+      router.replace(props.path + '/' + list[0].value);
     }
 
     // 路由发生变化
     watch(() => route.path, value => {
-      current.value = value.replace(props.path + '/', '');
-      const query = props.data.find(val => val.value === current.value);
-      current.label = query && query.label;
+      active.value = value.replace(props.path + '/', '');
     }, { immediate: true })
   })
 
   return <div className={joinClass('leayer', style.container)}>
-    <Helmet>
-      <title>{() => current.label + ' | Pl Vue'}</title>
-      <meta name='description' content={() => `${current.label}`} />
-    </Helmet>
     <ul className={() => joinClass(style.side, visible.value ? style.active : '')} onclick={() => visible.value = false}>
-      {props.data.map(val => 
-        <li className={() => current.value === val.value && style.active}>
+      {list.map(val => 
+        <li className={() => active.value === val.value && style.active}>
           <Link to={`${props.path}/${val.value}`}>{val.label}</Link>
         </li>
       )}
     </ul>
     <Router prefix={props.path}>
-      {...props.data.map(item => 
+      {...list.map(item => 
         <Route path={'/' + item.value} component={cloneFunction(Content)} />
       )}
     </Router>
@@ -60,21 +61,29 @@ function cloneFunction(fn: Function) {
   return newFn;
 }
 
+
+
 Docs.prototype.getInitialProps = async () => {
   const [err, res] = await api_getDocsConfig();
-  const list = [];
-  if (err) return list;
+  if (err) return {};
 
-  const obj = JSON.parse(res.data.content);
-  for (const key in obj) {
-    list.push({ label: obj[key], value: key });
-  }
-  return list;
+  const config = JSON.parse(res.data.content);
+  backupConfig = config;
+  return config;
 }
 
 
 function Content(props: PagePropsType) {
   const mdRef = ref<HTMLElement>();
+
+  const helmet = {
+    title: props.data.config[props.path.split('/').pop()],
+    description: '',
+  }
+  const matched = props.data.content.match(/<p>(.+)<\/p>/)
+  if (matched) {
+    helmet.description = matched[1].replace(/<[^>]+>/g, '');
+  }
 
   onMounted(async () => {
     import('highlight.js/styles/base16/decaf.css');
@@ -88,14 +97,24 @@ function Content(props: PagePropsType) {
   })
 
   return <div ref={mdRef} className={joinClass(style.content, 'markdown')}>
-    <div innerHTML={props.data}></div>
+    <Helmet>
+      <title>{() => helmet.title + ' | Pl Vue'}</title>
+      <meta name='description' content={() => helmet.description} />
+    </Helmet>
+    <div innerHTML={props.data.content}></div>
   </div>
 }
 
 Content.prototype.getInitialProps = async (option: GetInitialPropsOption) => {
-  const [err, res] = await api_getDocsContent(`/plvue${option.path.replace('/docs', '')}.md`)
-  if (err) return '';
-  return res.data.content;
+  const [err, res] = await api_getDocsContent(`/plvue${option.path.replace('/docs', '')}.md`);
+  const result = {
+    config: backupConfig,
+    content: '',
+  }
+  if (err) return result;
+
+  result.content = res.data.content;
+  return result;
 }
 
 export default Docs;
