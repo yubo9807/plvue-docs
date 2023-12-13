@@ -1,4 +1,5 @@
 import { defineConfig } from 'vite';
+import copy from 'rollup-plugin-copy';
 import baseConfig from './vite.base';
 import removeFuncs from './plugins/remove-func';
 import noOutput from './plugins/no-output';
@@ -13,15 +14,22 @@ const config = defineConfig({
     emptyOutDir: false,
     minify: true,
     ssr: 'src/server.ts',
-    lib: {
-      entry: 'src/server.ts',
-      fileName: 'server.js',
-      formats: ['cjs'],
+    rollupOptions: {
+      output: {
+        format: 'cjs',
+      },
+      plugins: [
+        copy({
+          targets: [{
+            src: ['node_modules/pl-vue', 'node_modules/axios-minified', 'node_modules/follow-redirects'],
+            dest: 'dist/node_modules/',
+          }],
+          verbose: true,
+          hook: 'writeBundle',
+        })
+      ]
     },
   },
-  optimizeDeps: {
-    include: ['src/app.tsx'],
-  }
 })
 
 export default Object.assign(config, baseConfig);
