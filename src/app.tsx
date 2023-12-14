@@ -5,13 +5,14 @@ import useStoreViewport, { Theme } from './store/viewport';
 import env from '~/config/env';
 import Layout from './components/layout';
 import NotFound from "./pages/not-found";
+import { throttle } from './utils/optimize';
 
 
 
 function App() {
   initRouter({
     base: env.BASE_URL,
-    mode: 'hash',
+    // mode: 'hash',
   });
 
   // #region 设置主题颜色
@@ -37,6 +38,19 @@ function App() {
     
   })
   // #endregion
+
+  onMounted(() => {
+    const bodyEl = document.body;
+    storeViewport.setClientWidth(bodyEl.clientWidth);
+    window.addEventListener('resize', throttle(() => {
+      storeViewport.setClientWidth(bodyEl.clientWidth);
+    }, 60))
+
+    window.addEventListener('scroll', throttle(() => {
+      const scrollY = window.scrollY;
+      storeViewport.setScrollY(scrollY);
+    }, 30))
+  })
 
   return <Layout>
     <Router notFound={NotFound}>

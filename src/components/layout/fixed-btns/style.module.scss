@@ -1,0 +1,19 @@
+.fixed-btns{
+  position: fixed;
+  bottom: 8vh;
+  right: 4vw;
+  > li{
+    --bg-color: rgba(249,251,255,.6);
+    --size: 50px;
+    width: var(--size);
+    height: var(--size);
+    border-radius: 50%;
+    background: var(--bg-color);
+    backdrop-filter: blur(4px);
+    text-align: center;
+    line-height: var(--size);
+    box-shadow: 0 6px 10px 4px rgba(0,0,0,.05);
+    cursor: pointer;
+    margin-top: 10px;
+  }
+}

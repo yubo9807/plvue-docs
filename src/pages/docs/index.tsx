@@ -1,5 +1,6 @@
 import { PagePropsType, Router, Route, Link, GetInitialPropsOption, useRouter, useRoute, Helmet } from "pl-vue/lib/router";
 import { h, nextTick, onMounted, onUnmounted, ref, watch } from "pl-vue";
+import useStoreFixedBtns from '@/store/fixed-btns';
 import { joinClass } from "@/utils/string";
 import { api_getDocsConfig, api_getDocsContent } from "@/api/docs";
 import style from "./style.module.scss";
@@ -46,6 +47,23 @@ function Docs(props: PagePropsType) {
     unwatch();
   });
 
+
+
+  // #region 移动端侧边栏按钮
+  const storeFixedBtns = useStoreFixedBtns();
+  const sideBtn = Symbol('side_btn')
+  onMounted(() => {
+    const jsx = <li
+      className={style.showSide}
+      onclick={() => visible.value = !visible.value}
+    >〒</li>
+    storeFixedBtns.add(sideBtn, jsx, 1);
+  })
+  onUnmounted(() => {
+    storeFixedBtns.delete(sideBtn);
+  })
+  // #endregion
+
   return <div className={joinClass('leayer', style.container)}>
     <ul className={() => joinClass(style.side, visible.value ? style.active : '')} onclick={() => visible.value = false}>
       {list.map(val => 
@@ -59,7 +77,6 @@ function Docs(props: PagePropsType) {
         <Route path={'/' + item.value} component={cloneFunction(Content)} />
       )}
     </Router>
-    <div className={() => joinClass(style.showSide, visible.value ? style.active : '')} onclick={() => visible.value = !visible.value}></div>
   </div>
 }
 
@@ -78,7 +95,7 @@ function cloneFunction(fn: Function) {
   const newFn = function (...args) {
     return fn.apply(this, args);
   }
-  newFn.prototype = fn.prototype;;
+  newFn.prototype = fn.prototype;
   return newFn;
 }
 
