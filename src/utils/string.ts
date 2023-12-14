@@ -9,6 +9,7 @@ export function joinClass(...args: string[]) {
 }
 
 const mimeTypes = {
+  'text/plain': ['.txt'],
   'text/html': ['.html'],
   'text/css': ['.css'],
   'application/javascript;': ['.js'],
