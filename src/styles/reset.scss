@@ -5,6 +5,7 @@
   --both-sides-padding: 20px;
 
   --main-bg-color: #fff;
+  --mark-bg-color: #f5f5f6;
   --main-font-color: #404040;
   --mark-font-color: #999;
   --link-font-color: #6088b6;
@@ -13,6 +14,7 @@
 :root[data-theme="dark"]{
   --main-bg-color: #1a1a1a;
   --main-font-color: #dadada;
+  --mark-bg-color: #0e2a35;
 }
 
 @media (max-width: 768px) {
@@ -39,4 +41,15 @@ ul{
 a{
   text-decoration: none;
   color: var(--link-font-color);
+}
+input, button {
+  appearance: none;
+  border-radius: 0;
+}
+
+@media (max-width: 1024px) and (orientation:portrait) {
+  /* 移动端 a 标签点击时有默认阴影 */
+  li, a, input, button {
+    -webkit-tap-highlight-color: transparent;
+  }
 }

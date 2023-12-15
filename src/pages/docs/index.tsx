@@ -4,7 +4,7 @@ import useStoreFixedBtns from '@/store/fixed-btns';
 import { joinClass } from "@/utils/string";
 import { api_getDocsConfig, api_getDocsContent } from "@/api/docs";
 import style from "./style.module.scss";
-import "./markdown.scss";
+import "@/styles/markdown.scss";
 
 let backupConfig = null;
 
@@ -114,7 +114,7 @@ function Content(props: PagePropsType) {
   }
 
   onMounted(async () => {
-    import('highlight.js/styles/base16/decaf.css');
+    import('@/styles/highlight.scss');
     const hljs = (await import('highlight.js/lib/common')).default;
 
     // 代码高亮
