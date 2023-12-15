@@ -1,10 +1,11 @@
 :root[data-theme="light"] {
   @import 'highlight.js/scss/a11y-light.scss';
-  .hljs{
-    background: transparent;
-  }
 }
 
 :root[data-theme="dark"] {
   @import 'highlight.js/scss/base16/decaf.scss';
+}
+
+.hljs{
+  background: transparent !important;
 }

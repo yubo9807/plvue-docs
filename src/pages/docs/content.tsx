@@ -1,9 +1,11 @@
 import { PagePropsType, GetInitialPropsOption, Helmet } from "pl-vue/lib/router";
-import { h, onMounted, ref } from "pl-vue";
+import { h, onMounted, ref, render } from "pl-vue";
 import { joinClass } from "@/utils/string";
 import { api_getDocsContent } from "@/api/docs";
 import style from "./style.module.scss";
 import { backupConfig } from ".";
+import { copyToBoard } from "@/utils/browser";
+import Message from "@/components/message";
 
 function Content(props: PagePropsType) {
   const mdRef = ref<HTMLElement>();
@@ -24,7 +26,13 @@ function Content(props: PagePropsType) {
     // 代码高亮
     const codeList = mdRef.value.querySelectorAll('pre code');
     codeList.forEach((val: HTMLElement) => {
+      const codeStr = val.innerText;
       hljs.highlightElement(val);
+      const el = render(<span className={style.copy} onclick={() => {
+        copyToBoard(codeStr);
+        Message.success('复制成功');
+      }}>copy</span>);
+      val.parentElement.appendChild(el);
     })
   })
 
