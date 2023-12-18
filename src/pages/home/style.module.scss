@@ -59,13 +59,13 @@
       opacity: 1;
     }
   }
-}
-:root[data-theme="dark"] .banner{
-  --box-bg-color: black;
-}
-@media (max-width: 768px) {
-  .banner strong{
-    font-size: 50px;
+  @include utils.mediaPhone() {
+    strong{
+      font-size: 50px;
+    }
+  }
+  @include utils.themeDark() {
+    --box-bg-color: black;
   }
 }
 
@@ -104,9 +104,9 @@
       color: var(--mark-font-color);
     }
   }
-}
-@media (max-width: 768px) {
-  .peculiarity > li{
-    width: 100%;
+  @include utils.mediaPhone() {
+    > li{
+      width: 100%;
+    }
   }
 }

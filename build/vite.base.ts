@@ -12,6 +12,11 @@ export default defineConfig({
     }
   },
   css: {
+    preprocessorOptions: {
+      scss: {
+        additionalData: `@use '@/styles/utils.scss';`,
+      },
+    },
     modules: {
       generateScopedName: '[local]-[hash:6]',
       localsConvention: 'camelCase',

@@ -1,3 +1,5 @@
+@use './utils.scss';
+
 :root{
   --header-height: 60px;
   --footer-height: 100px;
@@ -10,17 +12,15 @@
   --mark-font-color: #999;
   --link-font-color: #6088b6;
   --vue-bg: linear-gradient(315deg,#42d392 25%,#647eff);
+
+  @include utils.mediaPhone() {
+    --both-sides-padding: 10px;
+  }
 }
-:root[data-theme="dark"]{
+@include utils.themeDark() {
   --main-bg-color: #1a1a1a;
   --main-font-color: #dadada;
   --mark-bg-color: #0e2a35;
-}
-
-@media (max-width: 768px) {
-  :root{
-    --both-sides-padding: 10px;
-  }
 }
 
 html{
@@ -47,7 +47,7 @@ input, button {
   border-radius: 0;
 }
 
-@media (max-width: 1024px) and (orientation:portrait) {
+@include utils.mediaIpad() {
   /* 移动端 a 标签点击时有默认阴影 */
   li, a, input, button {
     -webkit-tap-highlight-color: transparent;

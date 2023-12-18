@@ -7,6 +7,9 @@
   color: var(--mark-font-color);
   font-size: 12px;
 }
-:root[data-theme="dark"] .footer{
-  --line-color: rgba(255,255,255,.1);
+
+@include utils.themeDark() {
+  .footer{
+    --line-color: rgba(255,255,255,.1);
+  }
 }

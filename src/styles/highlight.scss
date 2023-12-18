@@ -1,8 +1,8 @@
-:root[data-theme="light"] {
+@include utils.themeLight() {
   @import 'highlight.js/scss/a11y-light.scss';
 }
 
-:root[data-theme="dark"] {
+@include utils.themeDark() {
   @import 'highlight.js/scss/base16/decaf.scss';
 }
 

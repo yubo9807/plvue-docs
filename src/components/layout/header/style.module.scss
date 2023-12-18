@@ -23,11 +23,11 @@ $headerHeight: 60px;
   a{
     color: var(--link-color);
   }
-}
-:root[data-theme="dark"] .header{
-  --bg-color: transparent;
-  --line-color: rgba(255,255,255,.2);
-  --link-color: white;
+  @include utils.themeDark() {
+    --bg-color: transparent;
+    --line-color: rgba(255,255,255,.2);
+    --link-color: white;
+  }
 }
 
 .navigation{
