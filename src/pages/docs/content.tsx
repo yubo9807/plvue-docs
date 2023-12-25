@@ -41,19 +41,21 @@ function Content(props: PagePropsType) {
       <title>{() => helmet.title + ' | Pl Vue'}</title>
       <meta name='description' content={() => helmet.description} />
     </Helmet>
-    <div innerHTML={props.data.content}></div>
+    <section innerHTML={props.data.content}></section>
   </div>
 }
 
 Content.prototype.getInitialProps = async (option: GetInitialPropsOption) => {
-  const [err, res] = await api_getDocsContent(`/plvue${option.path.replace('/docs', '')}.md`);
+  const key = option.path.replace('/docs/', '');
+  const [err, res] = await api_getDocsContent(`/plvue/${key}.md`);
   const result = {
     config: backupConfig,
     content: '',
   }
   if (err) return result;
 
-  result.content = res.data.content;
+  const title = backupConfig[key];
+  result.content = `<h1>${title}</h1>${res.data.content}`;
   return result;
 }
 

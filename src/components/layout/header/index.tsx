@@ -16,7 +16,7 @@ export default function() {
   return <header className={style.header}>
     <div>
       <Link to="/">
-        <h1>Pl Vue</h1>
+        <strong className={style.title}>Pl Vue</strong>
       </Link>
     </div>
     <nav className={style.navigation}>
