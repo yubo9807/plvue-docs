@@ -1,7 +1,6 @@
 import style from './style.module.scss';
 import { h } from 'pl-vue';
 import { Helmet, Link } from 'pl-vue/lib/router';
-import { joinClass } from "@/utils/string";
 import env from "~/config/env";
 
 function Home() {
@@ -23,7 +22,7 @@ function Home() {
       </div>
     </div>
 
-    <article className={joinClass('leayer', 'module-gap', style.article)}>
+    <article className={['leayer', 'module-gap', style.article]}>
       <p className={style.paragraph}>
         {description}项目搭建可参考 
         &nbsp;<a href={env.GITHUB_URL+'mvvm_vue3'}>GitHub</a>
@@ -32,7 +31,7 @@ function Home() {
       <p className={style.mark}>该库本身与 Vue 框架无任何关系，只是多数 API 在命名上相同而已。</p>
     </article>
 
-    <ul className={joinClass('leayer', 'module-gap', style.peculiarity)}>
+    <ul className={['leayer', 'module-gap', style.peculiarity]}>
       <li>
         <h2>响不响应式的，高度交予开发者决定</h2>
         <p>

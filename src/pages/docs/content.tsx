@@ -1,6 +1,5 @@
 import { PagePropsType, GetInitialPropsOption, Helmet } from "pl-vue/lib/router";
 import { h, onMounted, ref, render } from "pl-vue";
-import { joinClass } from "@/utils/string";
 import { api_getDocsContent } from "@/api/docs";
 import style from "./style.module.scss";
 import { backupConfig } from ".";
@@ -36,7 +35,7 @@ function Content(props: PagePropsType) {
     })
   })
 
-  return <div ref={mdRef} className={joinClass(style.content, 'markdown')}>
+  return <div ref={mdRef} className={[style.content, 'markdown']}>
     <Helmet>
       <title>{() => helmet.title + ' | Pl Vue'}</title>
       <meta name='description' content={() => helmet.description} />

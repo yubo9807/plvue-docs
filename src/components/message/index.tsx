@@ -1,5 +1,4 @@
 import './module.scss';
-import { joinClass } from "@/utils/string";
 import { h, onMounted, ref, render, PropsType } from "pl-vue";
 import { delay } from "@/utils/network";
 import { isBrowser } from "pl-vue/lib/utils";
@@ -63,7 +62,7 @@ function Comp(props: Props) {
 
   return <div
     ref={elRef}
-    className={() => joinClass('comp-message', props.type, hidden.value && 'hidden')}
+    className={() => ['comp-message', props.type, hidden.value && 'hidden']}
     data-sort={queue.size - 1 + ''}
     style={`--time: ${ANI_TIME / 1000}s`}
     onmouseenter={cancelClose}

@@ -1,6 +1,5 @@
 import { h, PropsType } from "pl-vue"
 import './module.scss'
-import { joinClass } from "@/utils/string"
 
 type Props = PropsType<{
   value: () => boolean
@@ -12,7 +11,7 @@ export default function(props: Props) {
     props.onChange && props.onChange(!props.value());
   }
 
-  return <div className={() => joinClass('comp-switch', props.value() ? 'is-open' : '')} onclick={handleCilik}>
+  return <div className={() => ['comp-switch', props.value() ? 'is-open' : '']} onclick={handleCilik}>
     <div className='round'></div>
   </div>
 }

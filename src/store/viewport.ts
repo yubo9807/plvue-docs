@@ -3,7 +3,7 @@ import { createStore } from 'pl-vue/lib/store';
 export type Theme = 'light' | 'dark' | 'OS';
 
 const state = {
-  theme: 'light' as Theme,  // 系统主题
+  theme: 'OS' as Theme,  // 系统主题
 
   clientWidth: 0,  // 视口宽
   scrollY:     0,  // 纵向滚动条位置

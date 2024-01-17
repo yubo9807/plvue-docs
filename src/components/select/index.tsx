@@ -1,12 +1,11 @@
 import { h, PropsType } from "pl-vue";
 import { OptionValue } from "./option";
 import './module.scss';
-import { joinClass } from "@/utils/string";
 
 type Props = PropsType<{
   value: () => OptionValue
   onChange?: (val: OptionValue) => void
-  className?: () => string
+  className?: string
 }>
 export default function(props: Props) {
 
@@ -19,7 +18,7 @@ export default function(props: Props) {
     props.onChange && props.onChange(val);
   }
 
-  return <select className={joinClass('comp-select', props.className && props.className())} onchange={handleChange}>
+  return <select className={['comp-select', props.className]} onchange={handleChange}>
     {props.children}
   </select>
 }

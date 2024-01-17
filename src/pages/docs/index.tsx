@@ -1,11 +1,11 @@
-import { PagePropsType, Router, Route, Link, useRouter, useRoute } from "pl-vue/lib/router";
-import { h, nextTick, onMounted, onUnmounted, ref, watch } from "pl-vue";
+import { PagePropsType, Router, Route, Link } from "pl-vue/lib/router";
+import { h, onMounted, onUnmounted, ref } from "pl-vue";
 import useStoreFixedBtns from '@/store/fixed-btns';
-import { joinClass } from "@/utils/string";
 import { api_getDocsConfig } from "@/api/docs";
 import style from "./style.module.scss";
 import Content from "./content";
 import "@/styles/markdown.scss";
+import NotFound from "../not-found";
 
 export let backupConfig = null;
 
@@ -20,35 +20,7 @@ function Docs(props: PagePropsType) {
     list.push({ label: props.data[prop], value: prop });
   }
 
-  const active  = ref('');     // 侧边栏高亮
   const visible = ref(false);  // 移动端侧边栏显示
-
-  let unwatch = null;
-  onMounted(() => {
-    const route  = useRoute();
-    const router = useRouter();
-
-    // 路由发生变化
-    unwatch = watch(() => route.path, value => {
-      const type = value.replace(props.path, '');
-
-      // 重定向
-      if (!type || !(type.slice(1) in props.data)) {
-        nextTick(() => {
-          router.replace(props.path + '/' + list[0].value);
-        })
-        return;
-      }
-
-      // 设置高亮
-      active.value = type.slice(1);
-    }, { immediate: true })
-  })
-  onUnmounted(() => {
-    unwatch();
-  });
-
-
 
   // #region 移动端侧边栏按钮
   const storeFixedBtns = useStoreFixedBtns();
@@ -65,15 +37,16 @@ function Docs(props: PagePropsType) {
   })
   // #endregion
 
-  return <div className={joinClass('leayer', style.container)}>
-    <ul className={() => joinClass(style.side, visible.value ? style.active : '')} onclick={() => visible.value = false}>
+  return <div className={['leayer', style.container]}>
+    <ul className={() => [style.side, visible.value && style.active]} onclick={() => visible.value = false}>
       {list.map(val => 
-        <li className={() => active.value === val.value && style.active}>
+        <li>
           <Link to={`${props.path}/${val.value}`}>{val.label}</Link>
         </li>
       )}
     </ul>
     <Router prefix={props.path}>
+      <Route path='' redirect={props.path + '/' + list[0].value} component={() => void 0} />
       {...list.map(item => 
         <Route path={'/' + item.value} component={cloneFunction(Content)} />
       )}

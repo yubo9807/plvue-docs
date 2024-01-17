@@ -25,7 +25,9 @@ $headerHeight: 60px;
   a{
     color: var(--link-color);
   }
-  @include utils.themeDark() {
+}
+@include utils.themeDark() {
+  .header{
     --bg-color: transparent;
     --line-color: rgba(255,255,255,.2);
     --link-color: white;

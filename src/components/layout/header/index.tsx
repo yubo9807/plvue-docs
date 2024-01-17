@@ -20,13 +20,13 @@ export default function() {
       </Link>
     </div>
     <nav className={style.navigation}>
-      <Select className={() => style.item} value={() => storeViewport.theme} onChange={switchChange}>
+      <Select className={style.item} value={() => storeViewport.theme} onChange={switchChange}>
         <Option label="跟随系统" value="OS" />
         <Option label="亮色主题" value="light" />
         <Option label="暗色主题" value="dark" />
       </Select>
       <Link className={style.item} to='/docs'>文档</Link>
-      <a className={style.item} href={env.GITHUB_URL+'mvvm_vue3'} target="_blank">GitHub</a>
+      <a className={style.item} href={env.GITHUB_URL+'pl-vue'} target="_blank">GitHub</a>
     </nav>
   </header>
 }

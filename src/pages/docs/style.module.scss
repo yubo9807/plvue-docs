@@ -20,7 +20,7 @@
     &:not(:last-child){
       border-bottom: 1px solid var(--line-color);
     }
-    &.active{
+    &:has(:global(.exact-active)) {
       background: rgba(204,227,255,.14);
     }
   }

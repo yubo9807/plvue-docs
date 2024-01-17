@@ -26,16 +26,16 @@ function App() {
       document.documentElement.dataset.theme = prefers.matches ? 'dark' : 'light';
     }
     watch(() => storeViewport.theme, value => {
+      console.log(value);
       localStorage.setItem(THEME_KEY, value);
       if (value === 'OS') {
         followOS();
         prefers.addEventListener('change', followOS);
       } else {
-        document.documentElement.dataset.theme = storeViewport.theme;
+        document.documentElement.dataset.theme = value;
         prefers.removeEventListener('change', followOS);
       }
     }, { immediate: true })
-    
   })
   // #endregion
 
