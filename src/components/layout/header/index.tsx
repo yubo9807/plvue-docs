@@ -1,4 +1,4 @@
-import { h } from "pl-vue";
+import { h, toRef } from "pl-vue";
 import { Link } from "pl-vue/lib/router";
 import style from './style.module.scss';
 import env from "~/config/env";
@@ -20,7 +20,7 @@ export default function() {
       </Link>
     </div>
     <nav className={style.navigation}>
-      <Select className={style.item} value={() => storeViewport.theme} onChange={switchChange}>
+      <Select model={storeViewport.theme} className={style.item} onChange={switchChange}>
         <Option label="跟随系统" value="OS" />
         <Option label="亮色主题" value="light" />
         <Option label="暗色主题" value="dark" />
