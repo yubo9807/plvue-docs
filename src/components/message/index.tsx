@@ -1,7 +1,8 @@
 import './module.scss';
-import { h, onMounted, ref, render, PropsType } from "pl-vue";
+import { h, onMounted, ref, PropsType } from "pl-vue";
 import { delay } from "@/utils/network";
 import { isBrowser } from "pl-vue/lib/utils";
+import app from '@/basic';
 
 const queue    = new Set();
 const ANI_TIME = 400;
@@ -76,8 +77,8 @@ function Comp(props: Props) {
 let wrapEl: HTMLElement = null;
 function Message(config: Props) {
   if (!isBrowser()) return;
-  const el = render(<Comp {...config} />);
-  wrapEl ??= render(<div className='comp-message-wrap'></div>);
+  const el = app.render(<Comp {...config} />);
+  wrapEl ??= app.render(<div className='comp-message-wrap'></div>);
   wrapEl.appendChild(el);
   document.body.appendChild(wrapEl);
 }

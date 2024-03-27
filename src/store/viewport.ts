@@ -1,4 +1,4 @@
-import { createStore } from 'pl-vue/lib/store';
+import { defineStore } from 'pl-vue/lib/store';
 
 export type Theme = 'light' | 'dark' | 'OS';
 
@@ -23,4 +23,4 @@ const actions = {
   },
 }
 
-export default createStore(state, actions);
+export default defineStore({state, actions});

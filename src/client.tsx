@@ -1,6 +1,8 @@
-import { h, render } from "pl-vue";
-import App from "./app";
+import { h } from "pl-vue";
+import app from './basic'
+import App from './app';
 
+const node = app.render(<App />);
 const root = document.getElementById('root')
 root.innerHTML = '';
-root.appendChild(render(<App />));
+root.appendChild(node);

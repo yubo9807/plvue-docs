@@ -1,5 +1,5 @@
 import { Tree } from "pl-vue";
-import { createStore } from "pl-vue/lib/store"
+import { defineStore } from "pl-vue/lib/store"
 
 type Key = string | symbol
 type BtnItem = {
@@ -26,4 +26,4 @@ const actions = {
   }
 }
 
-export default createStore(state, actions);
+export default defineStore({state, actions});
