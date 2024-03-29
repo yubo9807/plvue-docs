@@ -5,6 +5,7 @@ import useStoreViewport, { Theme } from './store/viewport';
 import Layout from './components/layout';
 import NotFound from "./pages/not-found";
 import { throttle } from './utils/optimize';
+import Loading from './components/loading';
 
 
 
@@ -46,7 +47,7 @@ function App() {
   })
 
   return <Layout>
-    <Router notFound={NotFound}>
+    <Router loading={Loading} notFound={NotFound}>
       <Route path='/docs' component={() => import('./pages/docs')} exact={false} />
       <Route path='/' component={() => import('./pages/home')} />
     </Router>

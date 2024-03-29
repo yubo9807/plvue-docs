@@ -5,7 +5,8 @@ import { api_getDocsConfig } from "@/api/docs";
 import style from "./style.module.scss";
 import Content from "./content";
 import "@/styles/markdown.scss";
-import NotFound from "../not-found";
+import Loading from "@/components/loading";
+import { delay } from "@/utils/network";
 
 export let backupConfig = null;
 
@@ -45,7 +46,7 @@ function Docs(props: PagePropsType) {
         </li>
       )}
     </ul>
-    <Router prefix={props.path}>
+    <Router prefix={props.path} loading={Loading}>
       <Route path='' redirect={props.path + '/' + list[0].value} component={() => void 0} />
       {...list.map(item => 
         <Route path={'/' + item.value} component={cloneFunction(Content)} />

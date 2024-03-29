@@ -1,0 +1,21 @@
+.comp-loading{
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%,-50%);
+  width: 40px;
+  height: 40px;
+  border: 2px solid transparent;
+  border-top-color: #3e81ff;
+  border-radius: 50%;
+  z-index: 9999;
+  animation: rotate 1s linear infinite;
+}
+@keyframes rotate {
+  0% {
+    transform: translate(-50%,-50%) rotate(0deg);
+  }
+  100% {
+    transform: translate(-50%,-50%) rotate(360deg);
+  }
+}
