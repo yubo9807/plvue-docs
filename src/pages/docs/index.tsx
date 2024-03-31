@@ -7,6 +7,7 @@ import Content from "./content";
 import "@/styles/markdown.scss";
 import Loading from "@/components/loading";
 import { delay } from "@/utils/network";
+import { withoutEvent } from "@/utils/event";
 
 export let backupConfig = null;
 
@@ -22,14 +23,29 @@ function Docs(props: PagePropsType) {
   }
 
   const visible = ref(false);  // 移动端侧边栏显示
+  const sideRef = ref<HTMLElement>(null);
+  const openSideRef = ref<HTMLElement>(null);
 
   // #region 移动端侧边栏按钮
   const storeFixedBtns = useStoreFixedBtns();
-  const sideBtn = Symbol('side_btn')
+  const sideBtn = Symbol('side_btn');
+
   onMounted(() => {
+    let sideWithoutClickFunc: ReturnType<typeof withoutEvent> = null;
     const jsx = <li
+      ref={openSideRef}
       className={style.showSide}
-      onclick={() => visible.value = !visible.value}
+      onclick={() => {
+        if (visible.value) {
+          visible.value = false;
+          sideWithoutClickFunc && document.removeEventListener('click', sideWithoutClickFunc);
+        } else {
+          visible.value = true;
+          sideWithoutClickFunc = withoutEvent([sideRef.value, openSideRef.value], () => {
+            visible.value = false;
+          })
+        }
+      }}
     >〒</li>
     storeFixedBtns.add(sideBtn, jsx, 1);
   })
@@ -39,7 +55,7 @@ function Docs(props: PagePropsType) {
   // #endregion
 
   return <div className={['leayer', style.container]}>
-    <ul className={() => [style.side, visible.value && style.active]} onclick={() => visible.value = false}>
+    <ul ref={sideRef} className={() => [style.side, visible.value && style.active]} onclick={() => visible.value = false}>
       {list.map(val => 
         <li>
           <Link to={`${props.path}/${val.value}`}>{val.label}</Link>
