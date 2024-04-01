@@ -13,7 +13,7 @@ const html = readFileSync(resolve(__dirname, 'index.html'), 'utf-8');
 const server = createServer(async (req, res) => {
 
   const url = req.url.replace(env.BASE_URL, '');
-  const ext = extname(url);
+  const ext = extname(new URL('http://0.0.0.0'+url).pathname);  // 有些文件后面上服务器后会带参数，所以需要去掉
 
   if (getStaticFileExts().includes(ext)) {
     // 静态资源
