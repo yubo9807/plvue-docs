@@ -1,12 +1,11 @@
 import { PagePropsType, Router, Route, Link } from "pl-vue/lib/router";
-import { h, onMounted, onUnmounted, ref } from "pl-vue";
+import { binding, h, onMounted, onUnmounted, ref } from "pl-vue";
 import useStoreFixedBtns from '@/store/fixed-btns';
 import { api_getDocsConfig } from "@/api/docs";
 import style from "./style.module.scss";
 import Content from "./content";
 import "@/styles/markdown.scss";
 import Loading from "@/components/loading";
-import { delay } from "@/utils/network";
 import { withoutEvent } from "@/utils/event";
 
 export let backupConfig = null;
@@ -24,7 +23,6 @@ function Docs(props: PagePropsType) {
 
   const visible = ref(false);  // 移动端侧边栏显示
   const sideRef = ref<HTMLElement>(null);
-  const openSideRef = ref<HTMLElement>(null);
 
   // #region 移动端侧边栏按钮
   const storeFixedBtns = useStoreFixedBtns();
@@ -33,15 +31,15 @@ function Docs(props: PagePropsType) {
   onMounted(() => {
     let sideWithoutClickFunc: ReturnType<typeof withoutEvent> = null;
     const jsx = <li
-      ref={openSideRef}
       className={style.showSide}
       onclick={() => {
         if (visible.value) {
           visible.value = false;
           sideWithoutClickFunc && document.removeEventListener('click', sideWithoutClickFunc);
         } else {
+          const el = document.getElementsByClassName(style.showSide)[0] as HTMLElement;
           visible.value = true;
-          sideWithoutClickFunc = withoutEvent([sideRef.value, openSideRef.value], () => {
+          sideWithoutClickFunc = withoutEvent([sideRef.value, el], () => {
             visible.value = false;
           })
         }
@@ -55,7 +53,7 @@ function Docs(props: PagePropsType) {
   // #endregion
 
   return <div className={['leayer', style.container]}>
-    <ul ref={sideRef} className={() => [style.side, visible.value && style.active]} onclick={() => visible.value = false}>
+    <ul ref={sideRef} className={[style.side, () => visible.value && style.active]} onclick={() => visible.value = false}>
       {list.map(val => 
         <li>
           <Link to={`${props.path}/${val.value}`}>{val.label}</Link>

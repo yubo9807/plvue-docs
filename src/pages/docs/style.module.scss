@@ -46,21 +46,70 @@
 
 .content{
   width: calc(100% - var(--side-width));
-  margin-left: calc(var(--side-width) + 20px);
+  margin-left: calc(var(--side-width) + var(--both-sides-padding));
   margin-bottom: 30px;
-  pre{
-    position: relative;
+  display: flex;
+  justify-content: space-between;
+
+  --outline-width: 200px;
+  .md{
+    width: calc(100% - var(--outline-width) - 16px);
+    pre{
+      position: relative;
+    }
+    .copy{
+      position: absolute;
+      right: 6px;
+      top: 6px;
+      color: #abc0d8;
+      background: var(--main-bg-color);
+      border-radius: 4px;
+      padding: 0 4px;
+      font-size: 12px;
+      cursor: pointer;
+    }
   }
-  .copy{
-    position: absolute;
-    right: 6px;
-    top: 6px;
+
+  .outline{
+    position: relative;
+    flex-shrink: 0;
+    width: var(--outline-width);
+    color: var(--mark-font-color);
+    > ul{
+      position: sticky;
+      top: 80px;
+      > li{
+        padding-left: calc(var(--rank) * 10px);
+        line-height: 1.8;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        cursor: pointer;
+      }
+    }
+  }
+
+  @include utils.mediaIpad() {
+    .md{
+      width: calc(100% - var(--both-sides-padding));
+    }
+    .outline{
+      display: none;
+    }
+  }
+  @include utils.mediaPhone() {
+    margin-left: 0;
+    width: 100%;
+    .md{
+      width: 100%;
+    }
+  }
+
+  .link{
     color: #abc0d8;
-    background: var(--main-bg-color);
-    border-radius: 4px;
-    padding: 0 4px;
-    font-size: 12px;
+    margin-left: 10px;
     cursor: pointer;
+    font-size: 16px;
   }
   @include utils.mediaPhone() {
     width: 100%;

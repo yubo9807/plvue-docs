@@ -26,7 +26,7 @@ export default function() {
   function handleNavVisible() {
     if (navVisible.value) {
       navVisible.value = false;
-      // navWithoutClickFunc && document.removeEventListener('click', navWithoutClickFunc);
+      navWithoutClickFunc && document.removeEventListener('click', navWithoutClickFunc);
     } else {
       navVisible.value = true;
       navWithoutClickFunc = withoutEvent([navRef.value, openNavRef.value], () => {
@@ -41,7 +41,7 @@ export default function() {
         <strong className={style.title}>Pl Vue</strong>
       </Link>
     </div>
-    <nav ref={navRef} className={() => [style.navigation, navVisible.value && style.active]}>
+    <nav ref={navRef} className={[style.navigation, () => navVisible.value && style.active]}>
       <a>v{app.version}</a>
       <a>
         <Select model={storeViewport.theme} onChange={switchChange}>

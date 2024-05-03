@@ -21,6 +21,6 @@
   "dependencies": {
     "axios-minified": "^1.0.7",
     "highlight.js": "^11.8.0",
-    "pl-vue": "^0.6.4"
+    "pl-vue": "^0.6.10"
   }
 }

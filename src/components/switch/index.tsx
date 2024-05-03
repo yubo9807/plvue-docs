@@ -11,7 +11,7 @@ export default function(props: Props) {
     props.onChange && props.onChange(!props.value());
   }
 
-  return <div className={() => ['comp-switch', props.value() ? 'is-open' : '']} onclick={handleCilik}>
+  return <div className={['comp-switch', props.value() ? 'is-open' : '']} onclick={handleCilik}>
     <div className='round'></div>
   </div>
 }
